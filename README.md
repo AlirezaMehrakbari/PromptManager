@@ -54,7 +54,7 @@ Containerized with **Docker Compose** and ready for CI/CD deployment.
 
 ###  Clone the repository
 ```bash
-git clone https://github.com/<your-username>/<repo-name>.git
+git clone https://github.com/AlirezaMehrakbari/PromptManager
 cd <repo-name>
 ```
 

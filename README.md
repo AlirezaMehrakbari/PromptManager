@@ -58,10 +58,13 @@ git clone https://github.com/AlirezaMehrakbari/PromptManager
 ```
 
 ###  Environment Variables
+
+```
 Create `.env` in backend folder:
 DATABASE_URL=postgres://postgres:postgres@db:5432/prompts
 JWT_SECRET=supersecretkey
-```
+
+
 Create `.env.development` in frontend folder:
 NEXT_PUBLIC_BASE_URL=http://localhost:5000/api/
 
@@ -90,7 +93,6 @@ docker compose exec backend npx prisma migrate deploy
 ```
 
 > migrate dev: For development environment (creates migration & applies to DB)  
-> migrate deploy: For production environment (applies existing migration without altering schema)
 
 ---
 

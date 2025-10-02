@@ -35,13 +35,13 @@ Containerized with **Docker Compose** and ready for CI/CD deployment.
 ## Tech Stack & Justification
 
 **Frontend:**
-- **Next.js**: Optimized build performance, and excellent developer experience.  
-- **Tailwind CSS**: Enables rapid UI development with utility-first classes, responsive designs, and minimal CSS bundle size.  
+- **Next.js**: Optimized build performance, and excellent developer experience.
+- **Tailwind CSS**: Enables rapid UI development with utility-first classes, responsive designs, and minimal CSS bundle size.
 - **TypeScript**: Adds static typing for maintainable and bug-free code.
 
 **Backend:**
-- **Node.js + Express**: Lightweight, high-performance, and widely supported for RESTful API development.  
-- **Prisma ORM**: Modern type-safe ORM with great DX and clean schema definitions.  
+- **Node.js + Express**: Lightweight, high-performance, and widely supported for RESTful API development.
+- **Prisma ORM**: Modern type-safe ORM with great DX and clean schema definitions.
 - **PostgreSQL**: Reliable relational database with strong support for complex queries and indexing.
 
 **Containerization:**
@@ -52,66 +52,82 @@ Containerized with **Docker Compose** and ready for CI/CD deployment.
 
 ## Getting Started
 
-###  Clone the repository
+### 1. Clone the repository
 ```bash
 git clone https://github.com/AlirezaMehrakbari/PromptManager
+cd PromptManager
 ```
-
-###  Environment Variables
-
-```
-Create `.env` in backend folder:
-DATABASE_URL=postgres://postgres:postgres@db:5432/prompts
-JWT_SECRET=supersecretkey
-
-
-Create `.env.development` in frontend folder:
-NEXT_PUBLIC_BASE_URL=http://localhost:5000/api/
-
-### Frontend (local mode)
-```bash
-cd frontend
-npm install
-npm run dev
-```
-Frontend runs at: `http://localhost:3000`
-
-### Backend (local mode)
-```bash
-cd backend
-npm install
-npm run dev
-```
-Backend runs at: `http://localhost:5000/api/prompts`
 
 ---
 
-### Database Migrations (local mode)
-Docker:
+### 2. Environment Variables
+
+#### Backend – `backend/.env`
+```
+DATABASE_URL=postgres://postgres:postgres@db:5432/prompts
+JWT_SECRET=supersecretkey
+```
+
+#### Frontend – `frontend/.env`
+```
+NEXT_PUBLIC_BASE_URL=http://localhost:5000/api/
+```
+
+> **Note:** Any time you change `NEXT_PUBLIC_BASE_URL`, run:
+```bash
+docker compose down -v
+docker compose up --build --force-recreate
+```
+to clear cache and apply changes.
+
+---
+
+### 3. Start all services with Docker Compose
+```bash
+docker compose up --build
+```
+**URLs:**
+- Frontend → http://localhost:3000
+- Backend API → http://localhost:5000/api/prompts
+
+---
+
+## Database Migrations
+Run migrations manually after `up --build`:
 ```bash
 docker compose exec backend npx prisma migrate deploy
 ```
 
-> migrate dev: For development environment (creates migration & applies to DB)  
+Run development migrations (with schema changes):
+```bash
+docker compose exec backend npx prisma migrate dev
+```
 
 ---
 
-### Full Project with Docker Compose
+## Rebuild after DB reset or env changes
+If database volume is removed or `.env` variables change:
 ```bash
-docker compose up --build
+docker compose down -v
+docker compose up --build --force-recreate
 ```
-Frontend: `http://localhost:3000`  
-Backend API: `http://localhost:5000/api/prompts`
+
+Then run migrations:
+```bash
+docker compose exec backend npx prisma migrate deploy
+```
 
 ---
 
 ## API Endpoints
 
-**GET /api/prompts**  
-Fetch all prompts — query params: `favorite=true`
+**GET /api/prompts** → Get all prompts (optional `favorite=true`)  
+**POST /api/prompts** → Create prompt  
+**PUT /api/prompts/:id** → Edit prompt  
+**DELETE /api/prompts/:id** → Delete prompt  
+**POST /api/prompts/:id/favorite** → Toggle favorite
 
-**POST /api/prompts**  
-Create new prompt — body:
+Example POST:
 ```json
 {
   "title": "My Prompt",
@@ -119,25 +135,21 @@ Create new prompt — body:
 }
 ```
 
-**PUT /api/prompts/:id**  
-Edit prompt details  
+---
 
-**DELETE /api/prompts/:id**  
-Delete prompt  
-
-**POST /api/prompts/:id/favorite**  
-Toggle favorite status
+## Deployment
+To build images for production:
+```bash
+docker compose build
+```
+Deploy them to your server with:
+```bash
+docker compose up -d
+```
 
 ---
 
-
-## Deployment
-```bash
-docker-compose build
-
-
-## 📖 Conclusion
-Demonstrates:
+## Conclusion
 - End-to-end prompt management tool
 - Solid knowledge of Next.js, Tailwind CSS, Node.js, RESTful API
 - Production-ready setup with Docker and CI/CD

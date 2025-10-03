@@ -67,7 +67,7 @@ const Entry = ({onClose}: { onClose: (token: string) => void }) => {
         } else {
             return (
                 <div className="flex items-center justify-center min-h-screen">
-                    <div className="w-full w-sm">
+                    <div className="w-[90%] lg:w-1/3">
                         <p className="text-3xl font-semibold">Sign in</p>
 
                         <form className="flex flex-col items-center justify-center space-y-4 pt-8">
